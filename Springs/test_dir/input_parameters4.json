@@ -1,0 +1,15 @@
+{
+    "frames_num": [
+        1000
+    ],
+    "dt": [
+        0.16203
+    ],
+    "l_rest": 7.5,
+    "k": 6,
+    "mass": 1.4,
+    "omega": null,
+    "osc_num": 20,
+    "first_is_open": true,
+    "last_is_open": true
+}

@@ -1,0 +1,1 @@
+num_frequency	analytic_frequency	|num_frequency - analytic_frequency|

@@ -1,0 +1,4 @@
+# Screen size
+SCREEN_WIDTH = 1200
+SCREEN_HEIGHT = 1200
+
