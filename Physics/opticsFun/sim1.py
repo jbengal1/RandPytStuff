@@ -6,7 +6,6 @@ from light import Laser
 from mirror import Mirror
 from math import pi
 
-LINE_THICKNESS = 2
 
 class Sim1():
     def __init__(self):

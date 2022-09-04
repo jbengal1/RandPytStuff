@@ -5,6 +5,7 @@ from numpy.linalg import norm
 import json
 import text
 
+LINE_THICKNESS = 3
 
 class Line:
     def __init__(self, p1 = [WIDTH/2, HEIGHT/2], p2 = [WIDTH/4, HEIGHT], name="defultLine"):
@@ -13,7 +14,7 @@ class Line:
         self.p1 = p1
         self.p2 = p2
         self.length = sqrt((p2[1] - p1[1])**2 + (p2[0] - p1[0])**2)
-        self.thickness = 3
+        self.thickness = LINE_THICKNESS
         self.vector = np.array(self.p2) - np.array(self.p1)
         self.p1Out = False
         self.p2Out = False
