@@ -1,46 +1,41 @@
 import pygame
+from pygame.locals import *
 from settings import *
 from line import Line
 from math import sqrt, cos, sin, acos, pi
 import numpy as np
-from numpy import linalg
-
+from numpy.linalg import norm
+from walls import WALL_DOWN, WALLS
 
 class Laser(Line):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, p1 = [WIDTH/2, HEIGHT/2], p2 = [WIDTH, HEIGHT], name = "laser"):
+        super().__init__(p1, p2, name)
+        self.crossPoints = []
         self.obsticle = False
+        self.direction = np.array([1, 0])
+        self.reflected = False
     
-    def findEndpoint(self):       
-        self.setEndpoint(list(pygame.mouse.get_pos()))
+    def shoot(self):
+        # The laser's length begins from at least the maximum length
+        # it can reach. Not the best solution..
+        shoot_length = sqrt(WIDTH**2 + HEIGHT**2)
+        shoot_length *= 1.01 
 
-        # mouseVec = np.array(pygame.mouse.get_pos())
-        # mouseVecReltop1 = mouseVec - np.array(self.p1)
-        # mouseRelAngle = 0
-        # if (self.length !=0) and (linalg.norm(mouseVecReltop1 != 0)):
-        #     mouseRelAngle = acos(np.dot(self.vector, mouseVecReltop1)/(self.length*linalg.norm(mouseVecReltop1)))
+        # set new end point of the laser
+        new_endPoint = shoot_length*self.direction + np.array(self.p1)
+        self.setEndpoint( list(new_endPoint) )
+    
+    def setDirectionByMouse(self):
+        mouse_vec = np.array(pygame.mouse.get_pos())
+        moused_rel_vec = mouse_vec - np.array(self.p1)
+        mouse_rel_direction = moused_rel_vec/norm(moused_rel_vec) 
+        self.direction = mouse_rel_direction
 
-        # print(self.vector, mouseVecReltop1)        
-
-        # self.rotateReltop1(mouseRelAngle)
-
-        # print("laser from", self.p1, "to", self.p2)
-        # print("mouse", pygame.mouse.get_pos())
-        
-        iteration = 0 
-        while not self.obsticle:
-            iteration += 1
-            dl = 10
-            x2 = self.p2[0] + dl*cos(self.angle)
-            y2 = self.p2[1] + dl*sin(self.angle)
-            self.setEndpoint([x2 ,y2])
-
-            self.checkBorders()
-            # print(iteration, self.p2Out, self.p2)
-            if self.p2Out or (iteration>100):
-                break
-            
-
+    def findEndpoint(self):     
+        if not self.reflected:
+            self.setDirectionByMouse()
+        self.shoot()        
+        self.checkBorders()
 
 
 class Spotlight(Line):
@@ -53,8 +48,6 @@ def test():
     clock = pygame.time.Clock()
 
     laser = Laser()
-    print(laser.p2)
-
 
     while True:
         for event in pygame.event.get():
@@ -69,8 +62,8 @@ def test():
 
         # Draw on screen
         screen.fill('black')
-        pygame.draw.line(screen, 'white', laser.p1, laser.p2, 5)
-        pygame.display.update()
+        pygame.draw.line(screen, 'red', laser.p1, laser.p2, 5)
+        pygame.display.flip()
         clock.tick(FPS)
 
 

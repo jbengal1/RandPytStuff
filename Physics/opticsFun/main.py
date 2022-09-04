@@ -1,4 +1,5 @@
 import pygame, sys
+from pygame.locals import *
 from settings import *
 from sim1 import Sim1
 
@@ -21,11 +22,14 @@ class OpticSimulation:
                     pygame.quit()
                     sys.exit()
             
+            
             self.screen.fill('black')
+            # run
             self.sim1.run()
+
             pygame.display.update()
             self.clock.tick(FPS)
-            print(pygame.mouse.get_pos())
+            
 
 
 if __name__ == "__main__":
