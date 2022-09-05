@@ -64,6 +64,8 @@ class Line:
         if self.slope != 'inf':
             if self.vector[1] != 0:
                 self.angle = atan(self.vector[1]/self.vector[0])
+                if self.angle < 0:
+                    self.angle += pi
 
     def updateVector(self):
         self.vector = np.array(self.p2) - np.array(self.p1)
@@ -162,6 +164,8 @@ class Line:
         vec1 = self.vector
         vec2 = line2.vector
         dot = np.dot(vec1, vec2)
+
+        # Fix errors due to floating point
         if dot < -1:
             dot = -1
         elif dot > 1:
@@ -173,11 +177,12 @@ class Line:
         v1_direction = vec1/norm(vec1)
         v2_direction = vec2/norm(vec2)
         dot = np.dot(v1_direction, v2_direction)
+        
+        # Fix errors due to floating point
         if dot < -1:
             dot = -1
         elif dot > 1:
             dot = 1
-        
         return acos( dot )
 
     def drawCoordinates(self, screen, draw=True):
@@ -209,3 +214,9 @@ class Line:
                 return False
             
         
+    def calculateDistanceTo(self, point):
+        m = self.slope
+        n = self.y_intersection
+        x = point[0]
+        y = point[1]
+        return abs((m*x - y + n)/sqrt(m**2 + 1))

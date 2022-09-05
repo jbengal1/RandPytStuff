@@ -16,6 +16,12 @@ class Laser(Line):
         self.reflected = False
     
     def shoot(self):
+        # First find the direction
+        if not self.reflected:
+            self.setDirectionByMouse()
+        else:
+            self.setDirectionBySelf()
+
         # The laser's length begins from at least the maximum length
         # it can reach. Not the best solution..
         shoot_length = sqrt(WIDTH**2 + HEIGHT**2)
@@ -31,9 +37,10 @@ class Laser(Line):
         mouse_rel_direction = moused_rel_vec/norm(moused_rel_vec) 
         self.direction = mouse_rel_direction
 
+    def setDirectionBySelf(self):
+        self.direction = self.vector/norm(self.vector)
+
     def findEndpoint(self):     
-        if not self.reflected:
-            self.setDirectionByMouse()
         self.shoot()        
         self.checkBorders()
 

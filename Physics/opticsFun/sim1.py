@@ -68,7 +68,6 @@ class Sim1():
         mouse_moved = (rel_mouse[0] != 0) or (rel_mouse[1] != 0)
         if mouse_moved:
             print(pygame.mouse.get_pos())
-            print("angle*(180/pi), slope", self.shapes["laser"][0].angle*(180/pi), self.shapes["laser"][0].slope)
 
             # Calculate positions and interactions before drawing
             self.calculateReflected()
