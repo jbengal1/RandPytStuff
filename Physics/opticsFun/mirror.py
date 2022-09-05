@@ -44,7 +44,7 @@ class Mirror(Line):
             reflect_dirc_endpoint = np.array(self.cross_point) + direction_vec
 
             # Create a new reflected light object
-            reflected_light = Laser(self.cross_point, list(reflect_dirc_endpoint), name = "reflect")
+            reflected_light = Laser(self.cross_point, list(reflect_dirc_endpoint), name = "reflected")
             reflected_light.reflected = True
             reflected_light.findEndpoint()
 
@@ -55,11 +55,10 @@ class Mirror(Line):
             return reflected_light
 
 def backSideLine(mirror):
-    direction_vec = np.array(mirror.p2) - np.array(mirror.middle)
-    direc = direction_vec/norm(direction_vec)
+    direc = mirror.direction
     prep_direction = np.array([direc[1], -direc[0]])
     
-    mirror.back_space_vec = prep_direction*mirror.back_thickness
+    mirror.back_space_vec = prep_direction*mirror.back_thickness*0.8
     new_p1 = np.array(mirror.p1) + mirror.back_space_vec
     new_p2 = np.array(mirror.p2) + mirror.back_space_vec
     return Line(list(new_p1), list(new_p2))

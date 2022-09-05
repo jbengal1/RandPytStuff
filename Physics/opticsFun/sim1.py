@@ -4,21 +4,18 @@ from settings import *
 from line import Line
 from light import Laser
 from mirror import Mirror
+from shapes import Shapes
 from math import pi
-
+from colors import *
 
 class Sim1():
     def __init__(self):
 
         # get the display surface
         self.display_surface = pygame.display.get_surface()
-        self.shapes = {
-            "laser": [Laser()],
-            "mirror": [Mirror()],
-            "reflected": []
-        }
+        self.shapes = Shapes
         self.first_Mclick = False
-        self.reflected = []
+        self.reflected_num = 0
 
     def moveLinebyMouse(self):
         mouse_pos = pygame.mouse.get_pos()
@@ -31,12 +28,10 @@ class Sim1():
 
     def draw_shape(self, shape_type, shape):
         if shape_type == "laser":
-            pygame.draw.line(self.display_surface, 'red', shape.p1, shape.p2, shape.thickness)
+            pygame.draw.line(self.display_surface, RED, shape.p1, shape.p2, shape.thickness)
         if shape_type == "mirror":
-            pygame.draw.line(self.display_surface, 'white', shape.p1, shape.p2, shape.thickness)
-            pygame.draw.line(self.display_surface, 'gray', shape.back_line.p1, shape.back_line.p2, shape.back_thickness)
-        if shape_type == "reflected":
-            pygame.draw.line(self.display_surface, 'red', shape.p1, shape.p2, shape.thickness)
+            pygame.draw.line(self.display_surface, WHITE, shape.p1, shape.p2, shape.thickness)
+            pygame.draw.line(self.display_surface, BRIGHT_GRAY, shape.back_line.p1, shape.back_line.p2, shape.back_thickness)
 
     def draw_shapes(self):
         for shape_type in self.shapes:
@@ -46,17 +41,18 @@ class Sim1():
     
     def calculateReflected(self):
         # Clear previous reflected laser rays
-        self.shapes["reflected"] = []
-
+        del self.shapes["laser"][:-self.reflected_num-1:-1]
+        self.reflected_num = 0
+        
         # Find all reflected lasers
         for laser in self.shapes["laser"]:
+            laser.findEndpoint()
             for mirror in self.shapes["mirror"]:
-                laser.findEndpoint()
-                # self.reflected.append( mirror.reflect(laser) )
                 reflected = mirror.reflect(laser)
                 if reflected is not None:
-                    self.shapes["reflected"].append( reflected )
-
+                    self.reflected_num += 1
+                    self.shapes["laser"].append( reflected )
+        
 
     def run(self):
         # if mouse is pressed again, reset source of light position

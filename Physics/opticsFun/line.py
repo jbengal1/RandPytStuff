@@ -5,7 +5,7 @@ from numpy.linalg import norm
 import json
 import text
 
-LINE_THICKNESS = 3
+LINE_THICKNESS = 5
 
 class Line:
     def __init__(self, p1 = [WIDTH/2, HEIGHT/2], p2 = [WIDTH/4, HEIGHT], name="defultLine"):
@@ -16,6 +16,7 @@ class Line:
         self.length = sqrt((p2[1] - p1[1])**2 + (p2[0] - p1[0])**2)
         self.thickness = LINE_THICKNESS
         self.vector = np.array(self.p2) - np.array(self.p1)
+        self.direction = self.vector/norm(self.vector)
         self.p1Out = False
         self.p2Out = False
         self.draw_coordinates = False
@@ -70,8 +71,12 @@ class Line:
     def updateVector(self):
         self.vector = np.array(self.p2) - np.array(self.p1)
     
+    def updateDirection(self):
+        self.direction = self.vector/norm(self.vector)
+
     def updateAll(self):
         self.updateVector()
+        self.updateDirection()
         self.updateSlope()
         self.updateYintersection()
         self.updateLength()
@@ -123,6 +128,8 @@ class Line:
 
     def getLineFunction(self, x):
         # Calcualte the y coordinate
+        if self.slope == 'inf':
+            return None
         return self.slope*x + self.y_intersection
         
     def checkPointOn(self, point):
@@ -185,7 +192,7 @@ class Line:
             dot = 1
         return acos( dot )
 
-    def drawCoordinates(self, screen, draw=True):
+    def drawCoordinates(self, screen, draw=DRAW_COORDINATES):
         self.draw_coordinates = draw
 
         if self.draw_coordinates:
@@ -215,8 +222,11 @@ class Line:
             
         
     def calculateDistanceTo(self, point):
+        if self.slope == 'inf':
+            return abs(self.p1[0] - point[1])
         m = self.slope
         n = self.y_intersection
         x = point[0]
         y = point[1]
         return abs((m*x - y + n)/sqrt(m**2 + 1))
+    

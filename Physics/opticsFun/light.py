@@ -8,20 +8,18 @@ from numpy.linalg import norm
 from walls import WALL_DOWN, WALLS
 
 class Laser(Line):
-    def __init__(self, p1 = [WIDTH/2, HEIGHT/2], p2 = [WIDTH, HEIGHT], name = "laser"):
+    def __init__(self, p1 = [WIDTH/2, HEIGHT/2], p2 = [WIDTH, HEIGHT*0.6], name = "laser"):
         super().__init__(p1, p2, name)
         self.crossPoints = []
         self.obsticle = False
-        self.direction = np.array([1, 0])
         self.reflected = False
     
     def shoot(self):
-        # First find the direction
+        # If not reflected, set direction by mouse
+        # Else the direction remains the same
         if not self.reflected:
             self.setDirectionByMouse()
-        else:
-            self.setDirectionBySelf()
-
+    
         # The laser's length begins from at least the maximum length
         # it can reach. Not the best solution..
         shoot_length = sqrt(WIDTH**2 + HEIGHT**2)
@@ -36,9 +34,6 @@ class Laser(Line):
         moused_rel_vec = mouse_vec - np.array(self.p1)
         mouse_rel_direction = moused_rel_vec/norm(moused_rel_vec) 
         self.direction = mouse_rel_direction
-
-    def setDirectionBySelf(self):
-        self.direction = self.vector/norm(self.vector)
 
     def findEndpoint(self):     
         self.shoot()        
