@@ -29,7 +29,7 @@ def checkDigitinNum(d, n):
     return flag
 
   
-N_p = 15
+N_p = 110
 '''
 nums = np.array([k for k in range(2,N)], dtype=np.int32)
 primes_ch = [stupidCheck_prime(k) for k in range(2,N)]
@@ -42,7 +42,7 @@ primes = nums[primes_ch]
 print(primes)
 
 # Create an data array of the counts I want to check
-N = 10**3
+N = 10**5
 counter = []
 for p in primes:
     for num in range(2,N):
