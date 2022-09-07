@@ -1,3 +1,3 @@
-A very premature attempt to generize the physics simulation of 1d springs chain (at https://github.com/jbengal1/RandPytStuff/tree/master/Springs), to 2d grid.
+A very premature attempt to generalize the physics simulation of 1d springs chain (at https://github.com/jbengal1/RandPytStuff/tree/master/Springs), to 2d grid.
 
 Nothing to see here yet...
