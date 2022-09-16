@@ -7,8 +7,9 @@ import text
 
 LINE_THICKNESS = 5
 
-class Line:
+class Line():
     def __init__(self, p1 = [WIDTH/2, HEIGHT/2], p2 = [WIDTH/4, HEIGHT], name="defultLine"):
+        super(Line, self).__init__()
         self.name = name
 
         self.p1 = p1
@@ -19,7 +20,7 @@ class Line:
         self.direction = self.vector/norm(self.vector)
         self.p1Out = False
         self.p2Out = False
-        self.draw_coordinates = False
+        self.draw_coordinates = DRAW_COORDINATES
         
         self.slope = 'inf'
         if p2[0] - p1[0] != 0:

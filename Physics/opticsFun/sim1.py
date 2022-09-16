@@ -1,9 +1,6 @@
 import pygame
 from pygame.locals import *
 from settings import *
-from line import Line
-from light import Laser
-from mirror import Mirror
 from shapes import Shapes
 from math import pi
 from colors import *
@@ -29,31 +26,37 @@ class Sim1():
     def draw_shape(self, shape_type, shape):
         if shape_type == "laser":
             pygame.draw.line(self.display_surface, RED, shape.p1, shape.p2, shape.thickness)
-        if shape_type == "mirror":
+        if shape_type == "mirror_line":
             pygame.draw.line(self.display_surface, WHITE, shape.p1, shape.p2, shape.thickness)
             pygame.draw.line(self.display_surface, BRIGHT_GRAY, shape.back_line.p1, shape.back_line.p2, shape.back_thickness)
+        if shape_type == "mirror_circle":
+            pygame.draw.circle(self.display_surface, WHITE, shape.position, shape.radius)
+            pygame.draw.circle(self.display_surface, BRIGHT_GRAY, shape.position, shape.radius - shape.back_thickness)
+            # pygame.draw.line(self.display_surface, WHITE, shape.tangent.p1, shape.tangent.p2, shape.tangent.thickness)
+            # pygame.draw.line(self.display_surface, BRIGHT_GRAY, shape.tangent.back_line.p1, shape.tangent.back_line.p2, shape.tangent.back_thickness)
 
     def draw_shapes(self):
         for shape_type in self.shapes:
             for shape in self.shapes[shape_type]:
                 self.draw_shape(shape_type, shape)
                 shape.drawCoordinates(self.display_surface)
-    
+
     def calculateReflected(self):
         # Clear previous reflected laser rays
         del self.shapes["laser"][:-self.reflected_num-1:-1]
         self.reflected_num = 0
         
         # Find all reflected lasers
+        mirrors = self.shapes["mirror_line"] + self.shapes["mirror_circle"]
         for laser in self.shapes["laser"]:
             laser.findEndpoint()
-            for mirror in self.shapes["mirror"]:
+            for mirror in mirrors:
                 reflected = mirror.reflect(laser)
                 if reflected is not None:
                     self.reflected_num += 1
+                    print("Reflected", self.reflected_num)
                     self.shapes["laser"].append( reflected )
         
-
     def run(self):
         # if mouse is pressed again, reset source of light position
         if pygame.mouse.get_pressed() == (1, 0, 0):

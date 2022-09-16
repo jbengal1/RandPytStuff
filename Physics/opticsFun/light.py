@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 from settings import *
 from line import Line
-from math import sqrt, cos, sin, acos, pi
+from math import sqrt
 import numpy as np
 from numpy.linalg import norm
 from walls import WALL_DOWN, WALLS

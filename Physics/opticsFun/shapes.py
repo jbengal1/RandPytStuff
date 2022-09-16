@@ -4,13 +4,13 @@ with open("shapes.json") as file:
     shapes_data = json.load(file)
 
 from settings import *
-from line import Line
 from light import Laser
-from mirror import Mirror
+from mirror import MirrorLine, MirrorCircle
 
 Shapes = {
     "laser": [],
-    "mirror": []
+    "mirror_line": [],
+    "mirror_circle": []
 }
 
 for key in Shapes.keys():
@@ -18,17 +18,23 @@ for key in Shapes.keys():
         if shapes_data[key]["array"] is not None:
             array = shapes_data[key]["array"]
             for sub_array in array:
-                start_point = sub_array[0]
-                end_point = sub_array[1]
                 if key == "laser":
-                    Shapes[key].append( Laser(start_point, end_point) )
-                if key == "mirror":
-                    Shapes[key].append( Mirror(start_point, end_point) )
+                    Shapes[key].append( 
+                        Laser(p1=sub_array[0], p2=sub_array[1]) 
+                        )
+                if key == "mirror_line":
+                    Shapes[key].append(
+                        MirrorLine(p1=sub_array[0], p2=sub_array[1])
+                        )
+                if key == "mirror_circle":
+                    Shapes[key].append(
+                        MirrorCircle(radius=sub_array[0], position=sub_array[1])
+                        )
         else:
+            # Set default only if both there is at least one object,
+            # and it's array is not None
             if key == "laser":
                 Shapes[key].append( Laser() )
-            if key == "mirror":
-                Shapes[key].append( Mirror() )
 
 if __name__ == "__main__":
     print(Shapes)

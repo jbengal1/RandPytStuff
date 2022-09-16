@@ -1,14 +1,9 @@
-class O1:
-    def __init__(self, a="a", b="b", c="c"):
-        self.a = a
-        self.b = b
-        self.c = c
+from circle import Circle
+from line import Line
+from math import *
 
-class O2(O1):
-    def __init__(self, a="1", b="2", c="3"):
-        super().__init__(a, b, c)
+circle = Circle(position=[0,0], radius=1)
+line = Line(p1=[-10, 0.5], p2=[10, 0.5])
 
-
-o1 = O1()
-o2 = O2()
-print(o1.a, o2.a)
+cross_point = circle.getCrossPoint(line)
+print("cross_point", cross_point)
