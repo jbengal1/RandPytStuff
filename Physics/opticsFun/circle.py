@@ -19,6 +19,8 @@ class Circle(object):
         self.thickness = thickness
         self.draw_coordinates = DRAW_COORDINATES
 
+        self.cross_point = None
+
     def __str__(self):
         self.directory = {
             "name": self.name,
@@ -38,13 +40,36 @@ class Circle(object):
             # Draw text objects on the screen
             self.text_coordiantes.draw(screen)
     
+    def checkPointOn(self, point):
+        # Check if the calculated point on the circle
+        p1, p2 = self.position[0], self.position[1]
+        x, y = point[0], point[1]
+        # generrally there are two y solutions for a given x..
+        # we want the solution which gives abs(y_sol - y) = 0
+        solutions = [
+            abs(y + ((-1)**n)*sqrt(self.radius**2 - (x-p1)**2) - p2) 
+            for n in range(2)
+            ]
+        
+        if min(solutions) <= 0.0001:
+            return True
+        else:
+            return False
+    
     def getCrossPoint(self, line):
+        ''' 
+        This function returns the cross point 
+        of this circle with a given line. 
+        '''
+
+        # Set all short named parameters for later calculations.
         a = line.slope
         b = line.y_intersection
         R = self.radius
         p1 = self.position[0]
         p2 = self.position[1]
-        # Calculate cross point (assuming infinite lines)
+
+        # Calculate cross point (assuming infinite length line)
         if a == 'inf':
             x_cross = line.p1[0]
         else:

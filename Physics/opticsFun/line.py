@@ -22,6 +22,8 @@ class Line():
         self.p2Out = False
         self.draw_coordinates = DRAW_COORDINATES
         
+        self.cross_point = None
+        
         self.slope = 'inf'
         if p2[0] - p1[0] != 0:
             self.slope = (p2[1] - p1[1]) / (p2[0] - p1[0])
@@ -143,8 +145,10 @@ class Line():
         return on
             
     def getCrossPoint(self, line2):
-        # the function returns the [x,y] cross between two finite lines,
-        # if it exists, and None otherwise.
+        ''' 
+        This function returns the cross point 
+        of this line with a given line2. 
+        '''
         if self.slope == line2.slope or self.length == 0:
             return None        
         else:
@@ -161,10 +165,7 @@ class Line():
 
             # checking if the point found is inside the boundries of each line
             if y_cross != None:
-                if self.checkPointOn([x_cross, y_cross]) and line2.checkPointOn([x_cross, y_cross]):
-                    return [x_cross, y_cross]
-                else:
-                    return None
+                return [x_cross, y_cross]
             else:
                 return None
 
@@ -207,8 +208,10 @@ class Line():
 
 
     def checkAbovePoint(self, point):
-        # This method takes a given point and
-        # check wether its below the line function
+        ''' 
+        This method takes a given point and
+        check wether its below the line function
+        '''
         a, b = self.slope, self.y_intersection
         if a >= 0:
             if (point[0] >= b/a - point[1]/a) and (point[1] <= a*point[0] + b):

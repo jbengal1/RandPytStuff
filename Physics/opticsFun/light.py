@@ -1,3 +1,4 @@
+from turtle import distance
 import pygame
 from pygame.locals import *
 from settings import *
@@ -6,6 +7,7 @@ from math import sqrt
 import numpy as np
 from numpy.linalg import norm
 from walls import WALL_DOWN, WALLS
+from colors import *
 
 class Laser(Line):
     def __init__(self, p1 = [WIDTH/2, HEIGHT/2], p2 = [WIDTH, HEIGHT*0.6], name = "laser"):
@@ -13,6 +15,8 @@ class Laser(Line):
         self.crossPoints = []
         self.obsticle = False
         self.reflected = False
+        self.intensity = 1
+        self.color = RED
     
     def shoot(self):
         # If not reflected, set direction by mouse
@@ -38,7 +42,11 @@ class Laser(Line):
     def findEndpoint(self):     
         self.shoot()        
         self.checkBorders()
-
+    
+    def updateIntensity(self, intensity):
+        self.intensity = intensity
+        # update alpha of the color
+        self.color[3] *= self.intensity
 
 class Spotlight(Line):
     pass

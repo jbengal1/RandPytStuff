@@ -2,7 +2,7 @@ import pygame
 from settings import *
 from colors import *
 
-FONT_SIZE = 16
+FONT_SIZE = 24
 
 class Text:
     def __init__(self, text='', x=WIDTH/2, y=HEIGHT/2, color=WHITE, font_settings=('freesansbold.ttf', FONT_SIZE)):

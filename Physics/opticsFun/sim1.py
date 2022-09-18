@@ -4,6 +4,9 @@ from settings import *
 from shapes import Shapes
 from math import pi
 from colors import *
+from hitManager import HitManager
+
+hitManager = HitManager()
 
 class Sim1():
     def __init__(self):
@@ -25,7 +28,7 @@ class Sim1():
 
     def draw_shape(self, shape_type, shape):
         if shape_type == "laser":
-            pygame.draw.line(self.display_surface, RED, shape.p1, shape.p2, shape.thickness)
+            pygame.draw.line(self.display_surface, shape.color , shape.p1, shape.p2, shape.thickness)
         if shape_type == "mirror_line":
             pygame.draw.line(self.display_surface, WHITE, shape.p1, shape.p2, shape.thickness)
             pygame.draw.line(self.display_surface, BRIGHT_GRAY, shape.back_line.p1, shape.back_line.p2, shape.back_thickness)
@@ -41,22 +44,6 @@ class Sim1():
                 self.draw_shape(shape_type, shape)
                 shape.drawCoordinates(self.display_surface)
 
-    def calculateReflected(self):
-        # Clear previous reflected laser rays
-        del self.shapes["laser"][:-self.reflected_num-1:-1]
-        self.reflected_num = 0
-        
-        # Find all reflected lasers
-        mirrors = self.shapes["mirror_line"] + self.shapes["mirror_circle"]
-        for laser in self.shapes["laser"]:
-            laser.findEndpoint()
-            for mirror in mirrors:
-                reflected = mirror.reflect(laser)
-                if reflected is not None:
-                    self.reflected_num += 1
-                    print("Reflected", self.reflected_num)
-                    self.shapes["laser"].append( reflected )
-        
     def run(self):
         # if mouse is pressed again, reset source of light position
         if pygame.mouse.get_pressed() == (1, 0, 0):
@@ -69,8 +56,8 @@ class Sim1():
             print(pygame.mouse.get_pos())
 
             # Calculate positions and interactions before drawing
-            self.calculateReflected()
-
+            self.reflected_num = hitManager.calculateReflected(self.shapes, self.reflected_num)
+            
         # draw all shapes
         self.draw_shapes()
 

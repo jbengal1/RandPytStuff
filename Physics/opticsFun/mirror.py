@@ -13,7 +13,6 @@ class Mirror():
         super(Mirror, self).__init__()
         print("self.name = " + name)
         self.name = name
-        self.cross_point = None
         self.one_sided = True
 
     def __str__(self):
@@ -36,13 +35,11 @@ class MirrorLine(Line, Mirror):
             return False            
     
     def reflect(self, light, cross_point=None):
-
         if cross_point is None: self.cross_point = self.getCrossPoint(light)
         else: self.cross_point = cross_point
 
         flag = True
         if self.one_sided: flag = not self.backToPoint(light.p1)
-        print("self.cross_point", self.cross_point)
         if (self.cross_point != None) and (flag):
             # Calculte the direction vector of the reflected light            
             rel_angle = self.relAngleVec(light.vector)
@@ -60,6 +57,7 @@ class MirrorLine(Line, Mirror):
             # Create a new reflected light object
             reflected_light = Laser(self.cross_point, list(reflect_dirc_endpoint), name = "reflected")
             reflected_light.reflected = True
+            reflected_light.updateIntensity(0.2)
             reflected_light.findEndpoint()
 
             # Short the original to it's crosspoint
@@ -72,7 +70,6 @@ class MirrorCircle(Circle, Mirror):
     def __init__(self, radius=10, position=[WIDTH/2, HEIGHT/2]):
         super(MirrorCircle, self).__init__(radius=radius, position=position)
         self.back_thickness = 2*LINE_THICKNESS
-        self.cross_point = None
         self.tangent = MirrorLine(p1=[0,0], p2=[1,1], name="tangent")
 
     def pointInside(self, point):
@@ -88,15 +85,13 @@ class MirrorCircle(Circle, Mirror):
         self.tangent.setEndpoint(rotateVec2d(center_vector, pi/2) + self.cross_point)
         self.tangent.back_line = backSideLine(self.tangent)
 
-    def reflect(self, light):
-        self.cross_point = self.getCrossPoint(light)        
+    def reflect(self, light):   
         if self.cross_point != None :
-            if light.checkPointOn(self.cross_point):
-                self.updateTangent()
-                
-                # return the reflected light
-                reflected_light = self.tangent.reflect(light, self.cross_point)
-                return reflected_light
+            self.updateTangent()
+            
+            # return the reflected light
+            reflected_light = self.tangent.reflect(light, self.cross_point)
+            return reflected_light
 
 def backSideLine(mirror):
     prep_direction = np.array([
