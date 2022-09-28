@@ -14,4 +14,4 @@ I'm running this code by given an integer number from 1-8, which chooses the pai
 python N_oscillators.py 2
 will use input_initState2.json, input_parameters2.json pair files.
 
-A detailed description, can be found in Springs Oscillators Project.pdf and Oscillators and waves theory.pdf.
+A detailed description, can be found in "Springs Oscillators Project.pdf" and "Oscillators and waves theory.pdf".
